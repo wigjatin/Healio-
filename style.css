@@ -1,0 +1,300 @@
+/* style.css */
+:root {
+    --blue-50: #eef7fe;
+    --blue-100: #e0f2fe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --green-50: #dcfce7;
+    --green-100: #bbf7d0;
+    --green-200: #86efac;
+    --green-300: #4ade80;
+    --green-400: #22c55e;
+    --green-500: #16a34a;
+    --green-600: #15803d;
+    --green-700: #166534;
+    --green-800: #14532d;
+    --green-900: #064e3b;
+    --yellow-50: #fef9c3;
+    --yellow-100: #fef08a;
+    --yellow-200: #fde047;
+    --yellow-300: #facc15;
+    --yellow-400: #eab308;
+    --yellow-500: #ca8a04;
+    --yellow-600: #a16207;
+    --yellow-700: #854d0e;
+    --yellow-800: #713f12;
+    --yellow-900: #422006;
+    --red-50: #fee2e2;
+    --red-100: #fecaca;
+    --red-200: #fca5a5;
+    --red-300: #f87171;
+    --red-400: #ef4444;
+    --red-500: #dc2626;
+    --red-600: #b91c1c;
+    --red-700: #991b1b;
+    --red-800: #7f1d1d;
+    --red-900: #450a0a;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-50);
+}
+
+.stApp {
+    background-color: var(--gray-50);
+}
+
+/* Header */
+header {
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--blue-50);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-option {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar-option:hover {
+    background-color: var(--blue-100);
+}
+
+.sidebar-option.active {
+    background-color: var(--blue-200);
+    font-weight: 500;
+}
+
+.sidebar-option span {
+    margin-right: 0.5rem;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 0;
+}
+
+.crisis-button {
+    width: 100%;
+    background-color: var(--blue-600);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+}
+
+.crisis-button:hover {
+    background-color: var(--blue-700);
+}
+
+/* Main content */
+.main-content {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.chat-header h2 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--gray-800);
+    margin: 0;
+}
+
+.chat-header .subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+.chat-container {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Messages */
+.message {
+    max-width: 80%;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user-message {
+    background-color: var(--blue-50);
+    border-radius: 18px 18px 0 18px;
+    margin-left: auto;
+}
+
+.bot-message {
+    background-color: white;
+    border-radius: 18px 18px 18px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.success-message {
+    background-color: var(--green-50);
+    border-left: 4px solid var(--green-400);
+    border-radius: 0.5rem;
+}
+
+.warning-message {
+    background-color: var(--yellow-50);
+    border-left: 4px solid var(--yellow-400);
+    border-radius: 0.5rem;
+}
+
+.crisis-message {
+    background-color: var(--red-50);
+    border-left: 4px solid var(--red-400);
+    border-radius: 0.5rem;
+}
+
+.success-message p:first-child {
+    color: var(--green-800);
+    font-weight: 500;
+    margin: 0;
+}
+
+.success-message p:last-child {
+    color: var(--green-700);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+}
+
+.warning-message p:first-child {
+    color: var(--yellow-800);
+    font-weight: 500;
+    margin: 0;
+}
+
+.warning-message p:last-child {
+    color: var(--yellow-700);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+}
+
+.crisis-message p:first-child {
+    color: var(--red-800);
+    font-weight: 500;
+    margin: 0;
+}
+
+.crisis-message p:last-child {
+    color: var(--red-700);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+}
+
+/* Chat input */
+.stTextInput input {
+    background-color: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    border-radius: 9999px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+}
+
+.stTextInput input:focus {
+    outline: none;
+    border-color: var(--blue-300);
+    box-shadow: 0 0 0 2px var(--blue-200);
+}
+
+.stButton button {
+    background-color: var(--blue-600);
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.stButton button:hover {
+    background-color: var(--blue-700);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-content {
+        height: auto;
+        min-height: calc(100vh - 120px);
+    }
+    
+    .sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.5rem;
+    }
+    
+    .sidebar-option {
+        flex-direction: column;
+        min-width: 80px;
+        padding: 0.5rem;
+        text-align: center;
+    }
+    
+    .sidebar-option span {
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+    }
+    
+    .sidebar-footer {
+        display: none;
+    }
+}

@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="logo2.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary: 59, 130, 246; 
+    }
+    
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        overflow: auto;
+    }
+    
+    .dark {
+        background-color: #0f172a;
+        color: #f8fafc;
+    }
+    
+    .dark .sidebar {
+        background-color: #1e293b;
+        border-color: #334155;
+    }
+    
+    .dark .sidebar-option {
+        color: #e2e8f0;
+    }
+    
+    .dark .sidebar-option:hover {
+        background-color: #334155;
+    }
+    
+    .dark .sidebar-option.active {
+        background-color: rgba(var(--primary), 0.2);
+    }
+    
+    .dark .content-container {
+        background-color: #1e293b;
+        color: #f8fafc;
+    }
+    
+    .dark .chat-container {
+        background-color: #1e293b;
+    }
+    
+    .dark .bg-white {
+        background-color: #1e293b !important;
+        color: #f8fafc;
+    }
+    
+    .dark .text-gray-800 {
+        color: #f8fafc !important;
+    }
+    
+    .dark .text-gray-500 {
+        color: #94a3b8 !important;
+    }
+    
+    .dark .bg-blue-50 {
+        background-color: rgba(var(--primary), 0.1) !important;
+    }
+    
+    .dark .border-blue-100 {
+        border-color: rgba(var(--primary), 0.2) !important;
+    }
+    
+    .dark .bg-gray-100 {
+        background-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    
+    .dark .bg-slate-50 {
+        background-color: #0f172a !important;
+    }
+    
+    .dark .shadow-sm {
+        box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .dark .border-b {
+        border-bottom-color: #334155 !important;
+    }
+    
+    .dark .border-t {
+        border-top-color: #334155 !important;
+    }
+    
+    .dark .border {
+        border-color: #334155 !important;
+    }
+    
+    .dark .stress-question {
+        background-color: #334155;
+        border-color: #334155;
+    }
+    
+    .dark .breathing-preset {
+        background-color: rgba(var(--primary), 0.2);
+        color: #f8fafc;
+    }
+    
+    .dark .breathing-preset:hover {
+        background-color: rgba(var(--primary), 0.3);
+    }
+    
+    .dark .mood-btn.selected {
+        box-shadow: 0 0 15px rgba(var(--primary), 0.5);
+    }
+    
+    .main-container {
+        height: calc(100vh - 64px);
+        overflow: auto;
+    }
+    
+    .sidebar-option {
+        transition: all 0.2s ease;
+    }
+    
+    .sidebar-option:hover {
+        background-color: rgba(var(--primary), 0.1);
+    }
+    
+    .sidebar-option.active {
+        background-color: rgba(var(--primary), 0.2);
+        font-weight: 500;
+        color: rgb(var(--primary));
+    }
+    
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #93c5fd;
+        margin: auto;
+        transition: all 1.5s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .typing-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #6b7280;
+        margin-right: 4px;
+        animation: typing 1s infinite ease-in-out;
+    }
+    
+    .typing-indicator:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-indicator:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    
+    @media (max-width: 768px) {
+        .main-container {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .sidebar {
+            width: 100%;
+            height: auto;
+            flex-direction: row;
+            overflow-x: auto;
+            padding: 0.5rem;
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeIn {
+        animation: fadeIn 0.3s ease forwards;
+    }
+    
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0; transform: translateY(10px); }
+        10%, 90% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: rgb(var(--primary));
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .scroll-to-top.visible {
+        opacity: 1;
+    }
+    
+    .mood-btn {
+        transition: all 0.2s;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    
+    .mood-btn:hover {
+        transform: scale(1.2);
+    }
+    
+    .mood-btn.selected {
+        transform: scale(1.3);
+        box-shadow: 0 0 15px rgba(var(--primary), 0.5);
+    }
+    
+    .stress-question {
+        background-color: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .breathing-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .breathing-preset {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        background-color: #e0f2fe;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .breathing-preset:hover {
+        background-color: #bae6fd;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(var(--primary), 0.3);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--primary), 0.5);
+    }
+    
+    .dark ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .dark ::-webkit-scrollbar-thumb {
+        background: rgba(var(--primary), 0.5);
+    }
+    
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--primary), 0.7);
+    }
+    
+    #chatContainer {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(var(--primary), 0.3) rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark #chatContainer {
+        scrollbar-color: rgba(var(--primary), 0.5) rgba(255, 255, 255, 0.05);
+    }
+    
+    .theme-blue {
+        --primary: 59, 130, 246;
+    }
+    
+    .theme-green {
+        --primary: 16, 185, 129;
+    }
+    
+    .theme-purple {
+        --primary: 139, 92, 246;
+    }
+    
+    .theme-red {
+        --primary: 239, 68, 68;
+    }
+    
+    .theme-pink {
+        --primary: 236, 72, 153;
+    }
+    
+    .theme-indigo {
+        --primary: 99, 102, 241;
+    }
+    </style>
+</head>
+<body class="theme-blue">
+    <div class="min-h-screen bg-slate-50 flex flex-col">
+        <header class="bg-white shadow-sm py-4">
+            <div class="container mx-auto px-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="logo2.png" alt="Logo" class="h-10 w-10 rounded-full" />
+                    <h1 class="ml-3 text-xl font-semibold text-gray-800">Healio</h1>
+                </div>
+                <button class="md:hidden p-2 rounded-full bg-blue-50 text-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4 flex-1 flex flex-col">
+            <div class="main-container flex rounded-xl overflow-hidden bg-white shadow-md flex-1">
+                <div class="sidebar bg-blue-50 w-64 p-4 flex flex-col space-y-2 border-r">
+                    <div class="sidebar-option active flex items-center p-3 rounded-lg cursor-pointer" data-target="chat">
+                        <span class="text-blue-600 mr-2">💬</span>
+                        <span class="text-gray-800">Chat with Healio</span>
+                    </div>
+                    <div class="sidebar-option flex items-center p-3 rounded-lg cursor-pointer" data-target="stress">
+                        <span class="text-blue-600 mr-2">📊</span>
+                        <span class="text-gray-800">Stress Self-Assessment</span>
+                    </div>
+                    <div class="sidebar-option flex items-center p-3 rounded-lg cursor-pointer" data-target="mood">
+                        <span class="text-blue-600 mr-2">📈</span>
+                        <span class="text-gray-800">Mood Tracker</span>
+                    </div>
+                    <div class="sidebar-option flex items-center p-3 rounded-lg cursor-pointer" data-target="breathing">
+                        <span class="text-blue-600 mr-2">🌬️</span>
+                        <span class="text-gray-800">Breathing Exercises</span>
+                    </div>
+                    <div class="sidebar-option flex items-center p-3 rounded-lg cursor-pointer" data-target="settings">
+                        <span class="text-blue-600 mr-2">⚙️</span>
+                        <span class="text-gray-800">Settings</span>
+                    </div>
+                    <div class="mt-auto p-4">
+                        <div class="text-sm text-gray-500">Need immediate help?</div>
+                        <button class="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition"onclick="getUserLocation()">
+                            Crisis Resources
+                        </button>
+                        <ul id="therapist-list" class="mt-4 text-sm text-gray-700 space-y-2"></ul>
+                    </div>
+                </div>
+
+                <div class="flex-1 flex flex-col overflow-hidden">
+
+                    <div id="chat" class="content-container flex flex-col flex-1 h-full">
+                        <div class="flex-1 flex flex-col h-full">
+                            <div class="p-4 border-b">
+                                <h2 class="text-lg font-medium text-gray-800">Chat with Healio 💬</h2>
+                                <p class="text-sm text-gray-500">Your AI mental health companion</p>
+                            </div>
+
+                            <div class="chat-container flex flex-col space-y-4 p-4 flex-1 overflow-y-auto" id="chatContainer">
+                                <div class="p-3 rounded-lg max-w-xs text-sm bg-gray-100 text-gray-800 self-start">
+                                    Hello! I'm Healio, your mental health companion. How can I help you today?
+                                </div>
+                            </div>
+
+                            <div class="p-4 border-t">
+                                <div class="flex items-center">
+                                    <div class="relative flex-1">
+                                        <input
+                                            type="text"
+                                            id="messageInput"
+                                            placeholder="How can I help you today?"
+                                            class="w-full py-3 px-4 pr-12 bg-blue-50 border border-blue-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300"
+                                            autocomplete="off"
+                                        />
+                                    </div>
+                                    <button type="button" id="sendButton" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="stress" class="content-container hidden h-full overflow-y-auto p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Stress Self-Assessment 📊</h2>
+                        <p class="text-sm text-gray-500 mb-6">Take this 10-question assessment to measure your current stress levels.</p>
+                        
+                        <div id="stressQuestions" class="hidden">
+                            <div class="space-y-4">
+                                <div class="stress-question">
+                                    <p class="font-medium mb-2">1. How often have you felt nervous or stressed in the past week?</p>
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q1" value="0" class="form-radio text-blue-600">
+                                            <span class="ml-2">Not at all</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q1" value="1" class="form-radio text-blue-600">
+                                            <span class="ml-2">Several days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q1" value="2" class="form-radio text-blue-600">
+                                            <span class="ml-2">More than half the days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q1" value="3" class="form-radio text-blue-600">
+                                            <span class="ml-2">Nearly every day</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="stress-question">
+                                    <p class="font-medium mb-2">2. Have you experienced difficulty relaxing in the past week?</p>
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q2" value="0" class="form-radio text-blue-600">
+                                            <span class="ml-2">Not at all</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q2" value="1" class="form-radio text-blue-600">
+                                            <span class="ml-2">Several days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q2" value="2" class="form-radio text-blue-600">
+                                            <span class="ml-2">More than half the days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q2" value="3" class="form-radio text-blue-600">
+                                            <span class="ml-2">Nearly every day</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="stress-question">
+                                    <p class="font-medium mb-2">3. How often have you felt that you couldn't control the important things in your life?</p>
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q3" value="0" class="form-radio text-blue-600">
+                                            <span class="ml-2">Not at all</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q3" value="1" class="form-radio text-blue-600">
+                                            <span class="ml-2">Several days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q3" value="2" class="form-radio text-blue-600">
+                                            <span class="ml-2">More than half the days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q3" value="3" class="form-radio text-blue-600">
+                                            <span class="ml-2">Nearly every day</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="stress-question">
+                                    <p class="font-medium mb-2">4. How often have you felt confident about your ability to handle personal problems?</p>
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q4" value="3" class="form-radio text-blue-600">
+                                            <span class="ml-2">Not at all</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q4" value="2" class="form-radio text-blue-600">
+                                            <span class="ml-2">Several days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q4" value="1" class="form-radio text-blue-600">
+                                            <span class="ml-2">More than half the days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q4" value="0" class="form-radio text-blue-600">
+                                            <span class="ml-2">Nearly every day</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="stress-question">
+                                    <p class="font-medium mb-2">5. How often have you felt that things were going your way?</p>
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q5" value="3" class="form-radio text-blue-600">
+                                            <span class="ml-2">Not at all</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q5" value="2" class="form-radio text-blue-600">
+                                            <span class="ml-2">Several days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q5" value="1" class="form-radio text-blue-600">
+                                            <span class="ml-2">More than half the days</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="q5" value="0" class="form-radio text-blue-600">
+                                            <span class="ml-2">Nearly every day</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="submitStressTest" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition w-full">Submit Assessment</button>
+                        </div>
+                        
+                        <div id="stressIntro" class="text-center py-8">
+                            <div class="max-w-md mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                                <h3 class="text-xl font-semibold mb-2">Understand Your Stress Levels</h3>
+                                <p class="text-gray-600 mb-6">This assessment will help you identify your current stress levels and provide personalized recommendations based on your results.</p>
+                                <button id="startStressTest" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition">Begin Assessment</button>
+                            </div>
+                        </div>
+                        
+                        <div id="stressResult" class="hidden p-6 rounded-lg bg-blue-50">
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <h3 class="text-xl font-semibold mb-4">Your Stress Assessment Results</h3>
+                                <div id="stressScoreText" class="text-lg mb-4"></div>
+                                <div id="stressRecommendations" class="text-left mb-6"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-4 mb-6">
+                                    <div id="stressMeter" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <button id="retakeTest" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition">Retake Assessment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mood" class="content-container hidden h-full overflow-y-auto p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Mood Tracker 📈</h2>
+                        <p class="text-sm text-gray-500 mb-6">Track your emotional well-being over time</p>
+                        
+                        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                            <h3 class="text-lg font-semibold mb-4">How are you feeling today?</h3>
+                            <div class="flex justify-between mb-4">
+                                <button class="mood-btn text-4xl" data-mood="1">😭</button>
+                                <button class="mood-btn text-4xl" data-mood="2">😔</button>
+                                <button class="mood-btn text-4xl" data-mood="3">😐</button>
+                                <button class="mood-btn text-4xl" data-mood="4">😊</button>
+                                <button class="mood-btn text-4xl" data-mood="5">😄</button>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>Very Bad</span>
+                                <span>Bad</span>
+                                <span>Neutral</span>
+                                <span>Good</span>
+                                <span>Very Good</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-semibold mb-4">Your Mood History</h3>
+                            <div class="h-64">
+                                <canvas id="moodChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-2">Mood Insights</h3>
+                            <div id="moodInsights" class="text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="breathing" class="content-container hidden h-full overflow-y-auto p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Breathing Exercises 🌬️</h2>
+                        <p class="text-sm text-gray-500 mb-6">Reduce stress and anxiety with guided breathing techniques</p>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="breathing-circle" id="breathingCircle">
+                                Ready to Begin
+                            </div>
+                            
+                            <div class="text-center mt-8">
+                                <p class="text-xl font-medium mb-1" id="breathInstruction">Breathe In</p>
+                                <p class="text-gray-600 mb-4" id="breathTimer">4 seconds</p>
+                                
+                                <div class="flex space-x-4 justify-center">
+                                    <button id="startBreathing" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition">
+                                        Start Exercise
+                                    </button>
+                                    <button id="stopBreathing" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-lg transition hidden">
+                                        Pause
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="breathing-controls mt-8 w-full max-w-md">
+                                <h3 class="text-lg font-semibold mb-4">Breathing Techniques</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="breathing-preset" data-preset="4-4-4-4">
+                                        <h4 class="font-medium">Box Breathing</h4>
+                                        <p class="text-sm text-gray-600">4-4-4-4 pattern</p>
+                                    </div>
+                                    <div class="breathing-preset" data-preset="4-7-8">
+                                        <h4 class="font-medium">4-7-8 Method</h4>
+                                        <p class="text-sm text-gray-600">Calming technique</p>
+                                    </div>
+                                    <div class="breathing-preset" data-preset="5-5">
+                                        <h4 class="font-medium">Equal Breathing</h4>
+                                        <p class="text-sm text-gray-600">5-5 pattern</p>
+                                    </div>
+                                    <div class="breathing-preset" data-preset="6-2-8">
+                                        <h4 class="font-medium">Extended Exhale</h4>
+                                        <p class="text-sm text-gray-600">6-2-8 pattern</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 w-full max-w-md">
+                                <h3 class="text-lg font-semibold mb-4">Custom Breathing Pattern</h3>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label for="inhaleTime" class="block text-sm font-medium text-gray-700 mb-1">Inhale (sec)</label>
+                                        <input type="number" id="inhaleTime" min="2" max="10" value="4" class="w-full px-3 py-2 border rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label for="holdTime" class="block text-sm font-medium text-gray-700 mb-1">Hold (sec)</label>
+                                        <input type="number" id="holdTime" min="0" max="10" value="4" class="w-full px-3 py-2 border rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label for="exhaleTime" class="block text-sm font-medium text-gray-700 mb-1">Exhale (sec)</label>
+                                        <input type="number" id="exhaleTime" min="2" max="10" value="4" class="w-full px-3 py-2 border rounded-lg">
+                                    </div>
+                                </div>
+                                <button id="applyCustom" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition w-full">
+                                    Apply Custom Pattern
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="settings" class="content-container hidden h-full overflow-y-auto p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Settings ⚙️</h2>
+                        <p class="text-sm text-gray-500 mb-6">Customize your Healio experience</p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h3 class="text-lg font-semibold mb-4">Appearance</h3>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <span class="text-gray-700">Dark Mode</span>
+                                        <p class="text-xs text-gray-500">Toggle between light and dark theme</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="darkModeToggle" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-gray-700">Theme Color</span>
+                                        <p class="text-xs text-gray-500">Choose your preferred color</p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button data-color="blue" class="theme-color w-6 h-6 rounded-full bg-blue-600 border-2 border-blue-600"></button>
+                                        <button data-color="green" class="theme-color w-6 h-6 rounded-full bg-green-600 border-2 border-transparent"></button>
+                                        <button data-color="purple" class="theme-color w-6 h-6 rounded-full bg-purple-600 border-2 border-transparent"></button>
+                                        <button data-color="red" class="theme-color w-6 h-6 rounded-full bg-red-600 border-2 border-transparent"></button>
+                                        <button data-color="pink" class="theme-color w-6 h-6 rounded-full bg-pink-600 border-2 border-transparent"></button>
+                                        <button data-color="indigo" class="theme-color w-6 h-6 rounded-full bg-indigo-600 border-2 border-transparent"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h3 class="text-lg font-semibold mb-4">Notifications</h3>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <span class="text-gray-700">Daily Reminders</span>
+                                        <p class="text-xs text-gray-500">Get daily check-in reminders</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="notificationsToggle" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-gray-700">Reminder Time</span>
+                                        <p class="text-xs text-gray-500">Set your preferred reminder time</p>
+                                    </div>
+                                    <input type="time" id="reminderTime" class="px-3 py-1 border rounded-lg" value="09:00">
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h3 class="text-lg font-semibold mb-4">Data & Privacy</h3>
+                                <div>
+                                    <label for="apiEndpoint" class="block text-sm font-medium text-gray-700 mb-1">API Endpoint</label>
+                                    <input type="text" id="apiEndpoint" class="w-full px-3 py-2 border rounded-lg mb-4" value="http://localhost:5000/chat">
+                                    <p class="text-xs text-gray-500">Change this if you're using a custom API endpoint</p>
+                                </div>
+                                <div class="mt-4">
+                                    <button id="exportData" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Export My Data
+                                    </button>
+                                    <span class="mx-2 text-gray-400">|</span>
+                                    <button id="resetData" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                        Reset All Data
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <h3 class="text-lg font-semibold mb-4">About</h3>
+                                <div class="text-sm space-y-2">
+                                    <p>Healio v1.0.0</p>
+                                    <p>Your mental health companion</p>
+                                    <p class="text-gray-500">© 2025 Healio. All rights reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-to-top hidden" id="scrollToTop">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarOptions = document.querySelectorAll('.sidebar-option');
+        const containers = document.querySelectorAll('.content-container');
+
+        sidebarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                sidebarOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                containers.forEach(container => container.classList.add('hidden'));
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
+
+        // Chat functionality
+        const messageInput = document.getElementById('messageInput');
+        const chatContainer = document.getElementById('chatContainer');
+        const apiEndpoint = document.getElementById('apiEndpoint');
+        const sendButton = document.getElementById('sendButton');
+        const scrollToTop = document.getElementById('scrollToTop');
+
+        // Scroll to top functionality
+        chatContainer.addEventListener('scroll', function() {
+            if (this.scrollTop > 100) {
+                scrollToTop.classList.add('visible');
+            } else {
+                scrollToTop.classList.remove('visible');
+            }
+        });
+
+        scrollToTop.addEventListener('click', function() {
+            chatContainer.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        function loadSettings() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('darkModeToggle').checked = darkMode;
+            if (darkMode) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            const notificationsEnabled = localStorage.getItem('notificationsEnabled') !== 'false';
+            document.getElementById('notificationsToggle').checked = notificationsEnabled;
+            
+            const reminderTime = localStorage.getItem('reminderTime');
+            if (reminderTime) {
+                document.getElementById('reminderTime').value = reminderTime;
+            }
+            
+            const savedEndpoint = localStorage.getItem('apiEndpoint');
+            if (savedEndpoint) {
+                apiEndpoint.value = savedEndpoint;
+            }
+            
+            const themeColor = localStorage.getItem('themeColor') || 'blue';
+            document.querySelectorAll('.theme-color').forEach(btn => {
+                if (btn.getAttribute('data-color') === themeColor) {
+                    btn.classList.add('border-2', 'border-blue-600');
+                } else {
+                    btn.classList.remove('border-2', 'border-blue-600');
+                }
+            });
+            document.body.className = `theme-${themeColor}`;
+        }
+
+        apiEndpoint.addEventListener('change', function() {
+            localStorage.setItem('apiEndpoint', this.value);
+        });
+
+        function addMessage(text, sender) {
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('p-3', 'rounded-lg', 'max-w-xs', 'text-sm', 'transition', 'opacity-0', 'animate-fadeIn');
+            
+            if (sender === 'user') {
+                messageBubble.classList.add('bg-blue-600', 'text-white', 'self-end');
+            } else {
+                messageBubble.classList.add('bg-gray-100', 'text-gray-800', 'self-start');
+            }
+            
+            messageBubble.textContent = text;
+            chatContainer.appendChild(messageBubble);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            setTimeout(() => {
+                messageBubble.classList.remove('opacity-0', 'animate-fadeIn');
+            }, 10);
+        }
+        
+        async function sendMessage() {
+            const userMessage = messageInput.value.trim();
+            if (userMessage === '') return;
+
+            addMessage(userMessage, 'user');
+            messageInput.value = '';
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('p-3', 'rounded-lg', 'max-w-xs', 'text-sm', 'bg-gray-100', 'text-gray-800', 'self-start');
+            typingIndicator.innerHTML = '<div class="flex"><div class="typing-indicator"></div><div class="typing-indicator"></div><div class="typing-indicator"></div></div>';
+            chatContainer.appendChild(typingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch(apiEndpoint.value, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                chatContainer.removeChild(typingIndicator);
+                addMessage(data.response || "I'm here to listen. Tell me more about what's on your mind 💙", 'bot');
+            } catch (error) {
+                console.error('Error:', error);
+                chatContainer.removeChild(typingIndicator);
+                addMessage("I'm having trouble connecting right now. Please try again later.", 'bot');
+            } finally {
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function initMoodChart() {
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            window.moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Mood Level',
+                        data: [],
+                        borderColor: 'rgb(var(--primary))',
+                        backgroundColor: 'rgba(var(--primary), 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: 'rgb(var(--primary))',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const moods = ['😭', '😔', '😐', '😊', '😄'];
+                                    return moods[value - 1];
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const moods = ['Very Bad', 'Bad', 'Neutral', 'Good', 'Very Good'];
+                                    return moods[context.raw - 1];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            updateMoodChart();
+        }
+
+        function updateMoodChart() {
+            let moodHistory = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+            const grouped = {};
+            moodHistory.forEach(entry => {
+                grouped[entry.date] = entry.value;
+            });
+            
+            window.moodChart.data.labels = Object.keys(grouped);
+            window.moodChart.data.datasets[0].data = Object.values(grouped);
+            window.moodChart.update();
+            
+            updateMoodInsights();
+        }
+
+        function updateMoodInsights() {
+            const moodHistory = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+            const insightsContainer = document.getElementById('moodInsights');
+            
+            if (moodHistory.length === 0) {
+                insightsContainer.innerHTML = '<p>Track your mood to see insights and patterns.</p>';
+                return;
+            }
+            
+            const sum = moodHistory.reduce((acc, entry) => acc + entry.value, 0);
+            const average = (sum / moodHistory.length).toFixed(1);
+            
+            let trend = 'stable';
+            if (moodHistory.length > 1) {
+                const last = moodHistory[moodHistory.length - 1].value;
+                const prev = moodHistory[moodHistory.length - 2].value;
+                if (last > prev) trend = 'improving';
+                else if (last < prev) trend = 'declining';
+            }
+            
+            const moodCounts = {};
+            moodHistory.forEach(entry => {
+                moodCounts[entry.value] = (moodCounts[entry.value] || 0) + 1;
+            });
+            let mostCommonMood = Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b);
+            const moodLabels = ['Very Bad', 'Bad', 'Neutral', 'Good', 'Very Good'];
+            
+            insightsContainer.innerHTML = `
+                <p><strong>Average Mood:</strong> ${average}/5</p>
+                <p><strong>Trend:</strong> ${trend}</p>
+                <p><strong>Most Common Mood:</strong> ${moodLabels[mostCommonMood - 1]}</p>
+                <p><strong>Entries:</strong> ${moodHistory.length} days tracked</p>
+            `;
+        }
+
+        document.querySelectorAll('.mood-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                this.classList.add('selected');
+                
+                const moodValue = parseInt(this.getAttribute('data-mood'));
+                const moodText = this.textContent;
+                const today = new Date().toLocaleDateString();
+                
+                let moodHistory = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+                
+                const todayIndex = moodHistory.findIndex(entry => entry.date === today);
+                if (todayIndex !== -1) {
+                    moodHistory[todayIndex].value = moodValue;
+                } else {
+                    moodHistory.push({ date: today, value: moodValue });
+                }
+                
+                localStorage.setItem('moodHistory', JSON.stringify(moodHistory));
+                
+                updateMoodChart();
+                
+                const confirmation = document.createElement('div');
+                confirmation.classList.add('fixed', 'bottom-4', 'right-4', 'bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg', 'animate-fadeInOut');
+                confirmation.textContent = `Mood recorded: ${moodText}`;
+                document.body.appendChild(confirmation);
+                
+                setTimeout(() => {
+                    confirmation.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                    setTimeout(() => document.body.removeChild(confirmation), 500);
+                }, 2000);
+            });
+        });
+
+        document.getElementById('startStressTest').addEventListener('click', function() {
+            document.getElementById('stressIntro').classList.add('hidden');
+            document.getElementById('stressQuestions').classList.remove('hidden');
+        });
+
+        document.getElementById('submitStressTest').addEventListener('click', function() {
+            let score = 0;
+            document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                score += parseInt(input.value);
+            });
+            
+            document.getElementById('stressQuestions').classList.add('hidden');
+            const stressResult = document.getElementById('stressResult');
+            stressResult.classList.remove('hidden');
+            
+
+            const percentage = Math.min(100, Math.round((score / 15) * 100));
+            
+            let resultText = '';
+            let recommendations = '';
+            
+            if (score <= 5) {
+                resultText = 'Your stress levels appear to be low.';
+                recommendations = `
+                    <p class="mb-2">Keep up your healthy habits! Here are some suggestions:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Continue with your regular relaxation practices</li>
+                        <li>Maintain a balanced lifestyle</li>
+                        <li>Check in with your mood regularly</li>
+                    </ul>
+                `;
+            } else if (score <= 10) {
+                resultText = 'You\'re experiencing moderate stress.';
+                recommendations = `
+                    <p class="mb-2">Consider trying some of these stress-reducing techniques:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Practice deep breathing exercises</li>
+                        <li>Take short breaks throughout your day</li>
+                        <li>Engage in physical activity</li>
+                        <li>Try mindfulness meditation</li>
+                    </ul>
+                `;
+            } else {
+                resultText = 'Your stress levels appear to be high.';
+                recommendations = `
+                    <p class="mb-2">It might be helpful to:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Reach out to friends or family for support</li>
+                        <li>Consider speaking with a mental health professional</li>
+                        <li>Try our breathing exercises</li>
+                        <li>Practice self-care activities</li>
+                        <li>Use our crisis resources if needed</li>
+                    </ul>
+                `;
+            }
+            
+            document.getElementById('stressScoreText').innerHTML = `
+                <p class="font-medium">${resultText}</p>
+                <p class="text-2xl mt-2">Score: ${score}/15</p>
+            `;
+            
+            document.getElementById('stressRecommendations').innerHTML = recommendations;
+            document.getElementById('stressMeter').style.width = `${percentage}%`;
+            
+            const today = new Date().toLocaleDateString();
+            let stressHistory = JSON.parse(localStorage.getItem('stressHistory') || '[]');
+            stressHistory.push({ date: today, score: score });
+            localStorage.setItem('stressHistory', JSON.stringify(stressHistory));
+        });
+
+        document.getElementById('retakeTest').addEventListener('click', function() {
+            document.getElementById('stressResult').classList.add('hidden');
+            document.getElementById('stressQuestions').classList.add('hidden');
+            document.getElementById('stressIntro').classList.remove('hidden');
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+        });
+
+        const startBtn = document.getElementById('startBreathing');
+        const stopBtn = document.getElementById('stopBreathing');
+        const instruction = document.getElementById('breathInstruction');
+        const timer = document.getElementById('breathTimer');
+        const circle = document.getElementById('breathingCircle');
+        const inhaleInput = document.getElementById('inhaleTime');
+        const holdInput = document.getElementById('holdTime');
+        const exhaleInput = document.getElementById('exhaleTime');
+        
+        let breathingInterval;
+        let isInhaling = true;
+        let isHolding = false;
+        let secondsLeft = 4;
+        let inhaleTime = 4;
+        let holdTime = 4;
+        let exhaleTime = 4;
+
+        function updateBreathingDisplay() {
+            if (isInhaling) {
+                instruction.textContent = 'Breathe In';
+                circle.textContent = 'Breathe In';
+                circle.style.backgroundColor = '#60a5fa';
+            } else if (isHolding) {
+                instruction.textContent = 'Hold';
+                circle.textContent = 'Hold';
+                circle.style.backgroundColor = '#3b82f6';
+            } else {
+                instruction.textContent = 'Breathe Out';
+                circle.textContent = 'Breathe Out';
+                circle.style.backgroundColor = '#93c5fd';
+            }
+            timer.textContent = `${secondsLeft} second${secondsLeft !== 1 ? 's' : ''}`;
+        }
+
+        function startBreathingExercise() {
+            startBtn.classList.add('hidden');
+            stopBtn.classList.remove('hidden');
+            
+            isInhaling = true;
+            isHolding = false;
+            secondsLeft = inhaleTime;
+            updateBreathingDisplay();
+            
+            breathingInterval = setInterval(() => {
+                secondsLeft--;
+                timer.textContent = `${secondsLeft} second${secondsLeft !== 1 ? 's' : ''}`;
+                
+                if (secondsLeft <= 0) {
+                    if (isInhaling) {
+                        if (holdTime > 0) {
+                            isInhaling = false;
+                            isHolding = true;
+                            secondsLeft = holdTime;
+                        } else {
+                            isInhaling = false;
+                            isHolding = false;
+                            secondsLeft = exhaleTime;
+                        }
+                    } else if (isHolding) {
+                        isHolding = false;
+                        secondsLeft = exhaleTime;
+                    } else {
+                        isInhaling = true;
+                        isHolding = false;
+                        secondsLeft = inhaleTime;
+                    }
+                    updateBreathingDisplay();
+                }
+            }, 1000);
+        }
+
+        function stopBreathingExercise() {
+            clearInterval(breathingInterval);
+            startBtn.classList.remove('hidden');
+            stopBtn.classList.add('hidden');
+            instruction.textContent = 'Ready to begin';
+            timer.textContent = '';
+            circle.textContent = 'Ready to Begin';
+            circle.style.backgroundColor = '#93c5fd';
+        }
+
+        startBtn.addEventListener('click', startBreathingExercise);
+        stopBtn.addEventListener('click', stopBreathingExercise);
+
+        document.querySelectorAll('.breathing-preset').forEach(preset => {
+            preset.addEventListener('click', function() {
+                const pattern = this.getAttribute('data-preset').split('-');
+                inhaleTime = parseInt(pattern[0]);
+                holdTime = pattern.length > 2 ? parseInt(pattern[1]) : 0;
+                exhaleTime = parseInt(pattern[pattern.length - 1]);
+                
+                inhaleInput.value = inhaleTime;
+                holdInput.value = holdTime;
+                exhaleInput.value = exhaleTime;
+                
+                document.querySelectorAll('.breathing-preset').forEach(p => {
+                    p.classList.remove('bg-blue-200', 'dark:bg-blue-800');
+                });
+                this.classList.add('bg-blue-200', 'dark:bg-blue-800');
+                
+                if (!stopBtn.classList.contains('hidden')) {
+                    stopBreathingExercise();
+                    startBreathingExercise();
+                }
+            });
+        });
+
+        document.getElementById('applyCustom').addEventListener('click', function() {
+            inhaleTime = parseInt(inhaleInput.value) || 4;
+            holdTime = parseInt(holdInput.value) || 0;
+            exhaleTime = parseInt(exhaleInput.value) || 4;
+            
+            if (inhaleTime < 2) inhaleTime = 2;
+            if (inhaleTime > 10) inhaleTime = 10;
+            if (holdTime < 0) holdTime = 0;
+            if (holdTime > 10) holdTime = 10;
+            if (exhaleTime < 2) exhaleTime = 2;
+            if (exhaleTime > 10) exhaleTime = 10;
+            
+            inhaleInput.value = inhaleTime;
+            holdInput.value = holdTime;
+            exhaleInput.value = exhaleTime;
+            
+            if (!stopBtn.classList.contains('hidden')) {
+                stopBreathingExercise();
+                startBreathingExercise();
+            }
+            
+            const confirmation = document.createElement('div');
+            confirmation.classList.add('fixed', 'bottom-4', 'right-4', 'bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg', 'animate-fadeInOut');
+            confirmation.textContent = `Custom pattern applied: ${inhaleTime}-${holdTime}-${exhaleTime}`;
+            document.body.appendChild(confirmation);
+            
+            setTimeout(() => {
+                confirmation.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => document.body.removeChild(confirmation), 500);
+            }, 2000);
+        });
+
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            const isDarkMode = this.checked;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        document.getElementById('notificationsToggle').addEventListener('change', function() {
+            const notificationsEnabled = this.checked;
+            localStorage.setItem('notificationsEnabled', notificationsEnabled);
+            
+            if (notificationsEnabled && Notification.permission !== 'granted') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted');
+                    }
+                });
+            }
+        });
+
+        document.getElementById('reminderTime').addEventListener('change', function() {
+            localStorage.setItem('reminderTime', this.value);
+        });
+
+        document.querySelectorAll('.theme-color').forEach(button => {
+            button.addEventListener('click', function() {
+                const color = this.getAttribute('data-color');
+                localStorage.setItem('themeColor', color);
+                
+                document.querySelectorAll('.theme-color').forEach(btn => {
+                    if (btn.getAttribute('data-color') === color) {
+                        btn.classList.add('border-2', 'border-blue-600');
+                    } else {
+                        btn.classList.remove('border-2', 'border-blue-600');
+                    }
+                });
+                
+                document.body.className = `theme-${color}`;
+                if (document.documentElement.classList.contains('dark')) {
+                    document.body.classList.add('dark');
+                }
+                
+                if (window.moodChart) {
+                    window.moodChart.data.datasets[0].borderColor = `rgb(var(--primary))`;
+                    window.moodChart.data.datasets[0].backgroundColor = `rgba(var(--primary), 0.1)`;
+                    window.moodChart.data.datasets[0].pointBackgroundColor = `rgb(var(--primary))`;
+                    window.moodChart.update();
+                }
+            });
+        });
+
+        document.getElementById('exportData').addEventListener('click', function() {
+            const data = {
+                moodHistory: JSON.parse(localStorage.getItem('moodHistory') || '[]'),
+                stressHistory: JSON.parse(localStorage.getItem('stressHistory') || '[]'),
+                settings: {
+                    darkMode: localStorage.getItem('darkMode'),
+                    notificationsEnabled: localStorage.getItem('notificationsEnabled'),
+                    reminderTime: localStorage.getItem('reminderTime'),
+                    apiEndpoint: localStorage.getItem('apiEndpoint'),
+                    themeColor: localStorage.getItem('themeColor')
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `healio-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('resetData').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset all your data? This cannot be undone.')) {
+                localStorage.removeItem('moodHistory');
+                localStorage.removeItem('stressHistory');
+                updateMoodChart();
+                
+                // Show confirmation
+                const confirmation = document.createElement('div');
+                confirmation.classList.add('fixed', 'bottom-4', 'right-4', 'bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded-lg', 'shadow-lg', 'animate-fadeInOut');
+                confirmation.textContent = 'All data has been reset';
+                document.body.appendChild(confirmation);
+                
+                setTimeout(() => {
+                    confirmation.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                    setTimeout(() => document.body.removeChild(confirmation), 500);
+                }, 2000);
+            }
+        });
+
+        loadSettings(); 
+        initMoodChart();
+        
+        document.querySelector('.breathing-preset[data-preset="4-4-4-4"]').click();
+    });
+    </script>
+    <script>
+        function getUserLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                fetchNearbyTherapists(lat, lng);
+              },
+              () => {
+                alert("Location access denied.");
+              }
+            );
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+      
+        function fetchNearbyTherapists(lat, lng) {
+          const proxyURL = `http://localhost:3000/api/get-therapists?lat=${lat}&lng=${lng}`;
+      
+          fetch(proxyURL)
+            .then(response => response.json())
+            .then(data => {
+              renderTherapists(data.results);
+            })
+            .catch(err => {
+              console.error("Failed to fetch therapists:", err);
+              alert("Could not load therapist info. Try again later.");
+            });
+        }
+      
+        function renderTherapists(results) {
+          const list = document.getElementById("therapist-list");
+          list.innerHTML = "";
+          if (!results || results.length === 0) {
+            list.innerHTML = "<li>No nearby therapists found.</li>";
+            return;
+          }
+          results.forEach(place => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <strong>${place.name}</strong><br>
+              ${place.address}<br>
+              Coordinates: ${place.lat}, ${place.lon}
+            `;
+            list.appendChild(li);
+          });
+        }
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          const crisisButton = document.getElementById("crisis-button");
+          if (crisisButton) {
+            crisisButton.addEventListener("click", getUserLocation);
+          }
+        });
+      </script>
+      <script>
+        function getUserLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                fetchNearbyTherapists(lat, lng);
+              },
+              () => {
+                alert("Location access denied.");
+              }
+            );
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+      
+        function fetchNearbyTherapists(lat, lng) {
+          fetch(`http://localhost:3000/api/get-therapists?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.results) {
+                renderTherapists(data.results);
+              } else {
+                alert("No nearby therapists found.");
+              }
+            })
+            .catch((err) => {
+              console.error("Failed to fetch:", err);
+              alert("Could not load therapist info. Try again later.");
+            });
+        }
+      
+        function renderTherapists(results) {
+          const list = document.getElementById("therapist-list");
+          list.innerHTML = "";
+          if (!results || results.length === 0) {
+            list.innerHTML = "<li>No nearby therapists found.</li>";
+            return;
+          }
+      
+          results.forEach(place => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <strong>${place.name}</strong><br>
+              ${place.address}<br>
+              Coordinates: ${place.lat}, ${place.lon}
+            `;
+            list.appendChild(li);
+          });
+        }
+      </script>                
+</body>
+</html>
